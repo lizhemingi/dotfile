@@ -1,0 +1,195 @@
+
+let mapleader = " "
+set updatetime=100
+
+" syntax highlight on
+syntax on
+
+" allow plugins by file type (required for plugins!)
+filetype off
+filetype plugin indent on
+
+" when deal with unsaved files ask what to do
+set confirm
+
+" tab 缩进
+set tabstop=4 " 设置Tab长度为4空格
+set shiftwidth=4 " 设置自动缩进长度为4空格
+
+" 开启实时搜索
+set incsearch
+" 搜索时大小写不敏感
+set ignorecase
+set number
+" 开启鼠标工作
+set mouse=a
+" always show status bar
+set laststatus=2
+" incremental search
+set incsearch
+" highlighted search results
+set hlsearch
+
+set backspace=indent,eol,start
+
+" set hidden
+
+" move between split windows
+map<c-j> <c-w>j
+map<c-k> <c-w>k
+map<c-l> <c-w>l
+map<c-h> <c-w>h
+
+" remove highlight of last search
+noremap <C-n> :nohl<CR>
+vnoremap <C-n> :nohl<CR>
+inoremap <C-n> :nohl<CR>
+
+" yank and paste using system clipboard
+noremap <Leader>y "*y
+noremap <Leader>yy "*yy
+noremap <Leader>p "*p
+
+" ctrl+a move to beginning of the line in normal and insert mode
+map <C-a> <ESC>^
+imap <C-a> <ESC>I
+" ctrl+e move to end of the line in normal and insert mode
+map <C-e> <ESC>$
+imap <C-e> <ESC>A
+
+" save as sudo
+ca w!! w !sudo tee "%"
+
+" better indentation
+vnoremap < <gv  
+vnoremap > >gv
+
+" better backup, swap and undos storage
+set directory=~/.vim/dirs/tmp     " directory to place swap files in
+set backup                        " make backup files
+set backupdir=~/.vim/dirs/backups " where to put backup files
+set undofile                      " persistent undos - undo after you re-open
+set undodir=~/.vim/dirs/undos
+set viminfo+=n~/.vim/dirs/viminfo
+
+" create needed directories if they don't exist
+if !isdirectory(&backupdir)
+    call mkdir(&backupdir, "p")
+endif
+if !isdirectory(&directory)
+    call mkdir(&directory, "p")
+endif
+if !isdirectory(&undodir)
+    call mkdir(&undodir, "p")
+endif
+
+let g:go_fmt_command = "goimports" " 格式化将默认的 gofmt 替换
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+" open a new window at the definition of the symbol under the cursor. 
+" 2=>new tab, 3=>new in v split
+let g:godef_split=0
+
+call plug#begin('~/.vim/plugged')
+
+" Better file browser
+Plug 'scrooloose/nerdtree'
+let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\.\.$', '\.$', '\~$']
+" autocmd vimenter * NERDTree   "open nerdtree when start vim
+nmap <Leader>n :NERDTreeFind<CR>
+" auto close vim when only NERDTree window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+" let g:fzf_layout = { 'down': '~40%'  }
+
+Plug 'tomasr/molokai'
+
+" go 主要插件
+Plug 'fatih/vim-go', { 'tag': '*' }
+
+Plug 'SirVer/ultisnips'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'airblade/vim-gitgutter'
+
+" Autoclose
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'bubblegum'
+let g:airline#extensions#whitespace#enabled = 1
+
+Plug 'easymotion/vim-easymotion'
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key
+" binding.
+" `s{char}{label}`
+nmap <Leader>jj <Plug>(easymotion-overwin-f)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+Plug 'rust-lang/rust.vim'
+let g:rustfmt_autosave = 1
+
+call plug#end()
+
+let g:fzf_action = {
+  \ 'ctrl-s': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+
+nmap <C-p> :Files<CR>
+
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>tt :tabnext<cr>
+noremap <leader>bb :tabprevious<cr>
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> <leader>cr :CocRestart
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+" list outline
+nnoremap <silent> <leader>x  :<C-u>CocList outline<cr>
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" use 256 colors when possible
+if &term =~? 'mlterm\|xterm\|xterm-256\|screen-256'
+   let &t_Co = 256
+   colorscheme molokai
+else
+   colorscheme delek
+endif
