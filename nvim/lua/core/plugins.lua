@@ -1,59 +1,70 @@
--- packer.nvim
-vim.cmd [[packadd packer.nvim]]
-return require('packer').startup(function()
-    use 'wbthomason/packer.nvim'
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
+require("lazy").setup({
     -- starup time optimise
-    use 'dstein64/vim-startuptime'
-    use 'lewis6991/impatient.nvim'
-    use 'nathom/filetype.nvim'
+    "dstein64/vim-startuptime",
+    "lewis6991/impatient.nvim",
+    "nathom/filetype.nvim",
 
-    use 'sainnhe/sonokai'
+    "sainnhe/sonokai",
 
-    use 'scrooloose/nerdtree'
+    "scrooloose/nerdtree",
 
     -- language
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/cmp-path'
-    use 'hrsh7th/cmp-cmdline'
-    use 'hrsh7th/nvim-cmp'
-    use 'L3MON4D3/LuaSnip'
-    use 'nvim-treesitter/nvim-treesitter'
+    "neovim/nvim-lspconfig",
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-cmdline",
+    "hrsh7th/nvim-cmp",
+    "L3MON4D3/LuaSnip",
+    "nvim-treesitter/nvim-treesitter",
+
+    "rust-lang/rust.vim",
+    "simrat39/rust-tools.nvim",
+    "fatih/vim-go",
 
     -- git
-    use 'airblade/vim-gitgutter'
-    use 'tpope/vim-fugitive'
+    "airblade/vim-gitgutter",
+    "tpope/vim-fugitive",
 
     -- status line
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = 'kyazdani42/nvim-web-devicons'
-    }
+    {
+      "nvim-lualine/lualine.nvim",
+      dependencies = {"kyazdani42/nvim-web-devicons"},
+    },
 
     -- tagbar
-    use {
-        'liuchengxu/vista.vim',
-        requires = 'junegunn/fzf'
-    }
-    use 'junegunn/fzf.vim'
-    use 'easymotion/vim-easymotion'
+    {
+      "liuchengxu/vista.vim",
+      dependencies = {"junegunn/fzf"},
+    },
 
-    -- floating terminal
-    use 'voldikss/vim-floaterm'
+    "junegunn/fzf.vim",
+    "easymotion/vim-easymotion",
 
-    -- file telescope
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = 'nvim-lua/plenary.nvim'
-    }
+  -- floating terminal
+    "voldikss/vim-floaterm",
 
-    use 'rust-lang/rust.vim'
-    use 'simrat39/rust-tools.nvim'
-    use 'fatih/vim-go'
-    use 'jiangmiao/auto-pairs'
+  -- file telescope
+    {
+      "nvim-telescope/telescope.nvim",
+      dependencies = {"nvim-lua/plenary.nvim"},
+    },
 
-    use 'goolord/alpha-nvim'
-end)
+    "jiangmiao/auto-pairs",
+
+    "goolord/alpha-nvim",
+})
 
