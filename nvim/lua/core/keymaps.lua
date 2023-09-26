@@ -57,6 +57,8 @@ remap('n', '<leader>jj', '<Plug>(easymotion-overwin-f)')
 -- search
 map('n', '<leader>ss', '/')
 map('n', '<leader>sw', '/\\<lt>\\><left><left>')
+map('n', '<leader>gs', ':tabnew|0r!grep "" #<left><left><left>')
+map('n', '<leader>gw', ':tabnew|0r!grep -w "" #<left><left><left>')
 
 -- lsp
 mapcmd('<leader>le', 'lua vim.diagnostic.open_float()')
